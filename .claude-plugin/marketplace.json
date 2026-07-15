@@ -1,18 +1,19 @@
 {
-  "name": "psych-network-tools",
+  "name": "psych-network-css",
   "owner": {
-    "name": "Psychological Network Analysis Workflow"
+    "name": "Psych Network CSS"
   },
-  "description": "Claude Code marketplace for reproducible cross-sectional psychological symptom network analysis workflows in R.",
+  "description": "Claude Code resources for reproducible cross-sectional psychological symptom network analysis workflows in R.",
   "plugins": [
     {
       "name": "psych-network-analysis",
       "source": "./plugins/psych-network-analysis",
-      "displayName": "Psychological Network Analysis",
+      "displayName": "Cross-Sectional Psychological Network Analysis",
       "description": "Cross-sectional psychological symptom network analysis in R with confounder control, data-type-driven model selection, node audit, predictability, centrality, bootstrap stability, bridge analysis, and manuscript-ready reporting.",
       "category": "research",
       "tags": [
         "psychology",
+        "cross-sectional",
         "network-analysis",
         "r",
         "academic-writing"
