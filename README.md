@@ -78,10 +78,8 @@
 
 ### 从 GitHub Marketplace 安装
 
-将下面的 `YOUR_GITHUB_USERNAME` 和仓库名替换为实际地址：
-
 ```text
-/plugin marketplace add YOUR_GITHUB_USERNAME/psych-network-marketplace
+/plugin marketplace add kingfly51/psych-network-marketplace
 ```
 
 安装插件：
