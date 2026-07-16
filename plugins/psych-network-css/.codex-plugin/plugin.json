@@ -1,0 +1,27 @@
+{
+  "name": "psych-network-css",
+  "version": "1.0.0",
+  "description": "Reproducible cross-sectional psychological symptom network analysis in R with model selection, confounder control, predictability, centrality, stability, bridge analysis, and academic reporting.",
+  "author": {
+    "name": "Psych Network CSS",
+    "url": "https://github.com/kingfly51"
+  },
+  "homepage": "https://github.com/kingfly51/psych-network-css",
+  "repository": "https://github.com/kingfly51/psych-network-css",
+  "keywords": ["psychology", "cross-sectional", "network-analysis", "r", "academic-writing"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Psych Network CSS",
+    "shortDescription": "Cross-sectional symptom network analysis in R.",
+    "longDescription": "Inspect psychological symptom data, select GGM, ordinal GGM, Ising, or MGM, control prespecified confounders, estimate predictability and centrality, assess bootstrap accuracy and stability, run bridge analysis, and draft traceable Methods and Results sections.",
+    "developerName": "Psych Network CSS",
+    "category": "Research",
+    "capabilities": ["Data Analysis", "Academic Writing"],
+    "defaultPrompt": [
+      "请对当前工作区的数据进行横断面心理症状网络分析。",
+      "请检查节点类型并选择合适的 GGM、Ising 或 MGM 模型。",
+      "请完成带协变量控制、稳定性检验和桥接分析的症状网络分析。"
+    ],
+    "brandColor": "#0072B2"
+  }
+}
