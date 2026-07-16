@@ -1,6 +1,13 @@
-# Psych Network CSS for Claude Code
+# Psych Network CSS for Claude Code and Codex
 
-`psych-network-css` 是一个面向心理学、精神病学、护理学及相关健康研究的 Claude Code 插件资源包。CSS 表示 cross-sectional study，目前包含 `psych-network-analysis` 插件，用于在 R 中完成可复现的横断面心理症状网络分析，并生成分析代码、结果表、学术图形以及论文的 **2.4 Data Analysis** 和完整 **3 Results**。
+`psych-network-css` 是一个面向心理学、精神病学、护理学及相关健康研究的双平台插件资源包。CSS 表示 cross-sectional study。仓库分别提供 Claude Code 和 Codex 入口，共享同一套横断面心理症状网络分析方法，用于生成可复现的 R 代码、结果表、学术图形以及论文的 **2.4 Data Analysis** 和完整 **3 Results**。
+
+| 平台 | 插件名称 | 显式调用方式 |
+|---|---|---|
+| Claude Code | `psych-network-analysis` | `/psych-network-analysis:analyze` |
+| Codex | `psych-network-css` | `$analyze-cross-sectional-network` |
+
+两个版本均支持自然语言自动调用。Claude 与 Codex 的清单和技能入口彼此独立，不要交叉使用安装命令。
 
 ## 功能
 
@@ -76,7 +83,9 @@
 
 ## 安装
 
-### 从 GitHub 在线安装
+### Claude Code
+
+#### 从 GitHub 在线安装
 
 添加 GitHub 插件资源：
 
@@ -96,7 +105,7 @@
 /reload-plugins
 ```
 
-### 从资源包离线安装
+#### 从资源包离线安装
 
 资源包 `agent-res` 中应包含完整的 `psych-network-css` 文件夹。请先确认其中存在 `.claude-plugin/marketplace.json`。
 
@@ -116,12 +125,43 @@ macOS 或 Linux：
 /reload-plugins
 ```
 
-### 本地开发加载
+#### 本地开发加载
 
 在仓库根目录运行：
 
 ```powershell
 claude --plugin-dir ./plugins/psych-network-analysis
+```
+
+### Codex
+
+Codex 使用仓库根目录下的 `.agents/plugins/marketplace.json`，插件主体位于 `plugins/psych-network-css`。
+
+#### 从资源包离线安装
+
+Windows：
+
+```powershell
+codex plugin marketplace add c:/agent-res/psych-network-css
+codex plugin add psych-network-css@psych-network-css
+```
+
+macOS 或 Linux：
+
+```bash
+codex plugin marketplace add ~/agent-res/psych-network-css
+codex plugin add psych-network-css@psych-network-css
+```
+
+安装后请新建一个 Codex 任务，使新技能进入任务上下文。
+
+#### 本地开发加载
+
+在仓库根目录执行：
+
+```powershell
+codex plugin marketplace add .
+codex plugin add psych-network-css@psych-network-css
 ```
 
 ## 使用
@@ -138,10 +178,16 @@ claude --plugin-dir ./plugins/psych-network-analysis
 请对 data.xlsx 进行横断面心理症状网络分析，并将年龄、性别和教育程度作为混杂因素控制。
 ```
 
-也可以强制指定技能和数据文件：
+Claude Code 可以显式指定技能和数据文件：
 
 ```text
 /psych-network-analysis:analyze D:/project/data.xlsx
+```
+
+Codex 可以显式调用：
+
+```text
+使用 $analyze-cross-sectional-network 分析 D:/project/data.xlsx。
 ```
 
 ## 主要输出
@@ -195,17 +241,24 @@ c(
 
 ```text
 psych-network-css/
+├── .agents/
+│   └── plugins/
+│       └── marketplace.json       # Codex marketplace
 ├── .claude-plugin/
-│   └── marketplace.json
+│   └── marketplace.json           # Claude Code marketplace
 ├── plugins/
-│   └── psych-network-analysis/
-│       ├── .claude-plugin/
-│       │   └── plugin.json
+│   ├── psych-network-analysis/     # Claude Code version
+│   │   ├── .claude-plugin/
+│   │   ├── assets/
+│   │   ├── references/
+│   │   └── skills/analyze/
+│   └── psych-network-css/          # Codex version
+│       ├── .codex-plugin/
 │       ├── assets/
 │       ├── references/
-│       └── skills/
-│           └── analyze/
-│               └── SKILL.md
+│       └── skills/analyze-cross-sectional-network/
+├── scripts/
+│   └── sync-analysis-resources.ps1
 └── README.md
 ```
 

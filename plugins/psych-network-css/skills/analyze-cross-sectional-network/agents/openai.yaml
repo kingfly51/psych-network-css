@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cross-Sectional Network Analysis"
+  short_description: "Analyze psychological symptom networks in R"
+  default_prompt: "Use $analyze-cross-sectional-network to analyze my cross-sectional psychological symptom network data in R."
