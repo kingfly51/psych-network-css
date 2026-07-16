@@ -1,0 +1,20 @@
+{
+  "name": "psych-network-css",
+  "interface": {
+    "displayName": "Psych Network CSS"
+  },
+  "plugins": [
+    {
+      "name": "psych-network-css",
+      "source": {
+        "source": "local",
+        "path": "./plugins/psych-network-css"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Research"
+    }
+  ]
+}
