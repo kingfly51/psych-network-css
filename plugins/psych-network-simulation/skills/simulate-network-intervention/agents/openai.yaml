@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cross-Sectional NIRA Simulation"
+  short_description: "Model binary cross-sectional interventions"
+  default_prompt: "Use $simulate-network-intervention for a binary cross-sectional network intervention analysis."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dynamic Network Intervention"
+  short_description: "Simulate dynamic EMA network interventions"
+  default_prompt: "Use $simulate-dynamic-network-intervention to analyze my binary EMA network data with KimNIRA."

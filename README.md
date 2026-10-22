@@ -1,274 +1,95 @@
-# Psych Network CSS for Claude Code and Codex
+# psych-network-css
 
-`psych-network-css` 是一个面向心理学、精神病学、护理学及相关健康研究的双平台插件资源包。CSS 表示 cross-sectional study。仓库分别提供 Claude Code 和 Codex 入口，共享同一套横断面心理症状网络分析方法，用于生成可复现的 R 代码、结果表、学术图形以及论文的 **2.4 Data Analysis** 和完整 **3 Results**。
+面向 Claude Code 和 Codex 的心理网络分析资源包。包含五个相互独立的分析 skill，分装在两个插件中：横断面网络分析、横断面网络比较、交叉滞后面板网络（CLPN）、横断面 NIRA 计算机模拟干预、KimNIRA 动态模拟干预。每项功能都有对应的精简 R 教程。
 
-| 平台 | 插件名称 | 显式调用方式 |
+所有流程以数据结构和研究问题为起点，控制默认分析数量与计算量；可选分析不自动铺开。学术报告范围默认为 `2.4 Data Analysis` 与 `3 Results`，只报告实际运行且可追溯的结果。网络关联或模拟结果不表述为因果效应或已证实的治疗效果。
+
+## 五项功能
+
+| 分析 | 数据/问题 | 教程 |
 |---|---|---|
-| Claude Code | `psych-network-analysis` | `/psych-network-analysis:analyze` |
-| Codex | `psych-network-css` | `$analyze-cross-sectional-network` |
+| 横断面网络 | 单次测量；按节点类型选择 GGM、Ising 或 MGM 等适用模型；含节点审查、可预测性、中心性与按需桥接分析 | `network_analysis_template.R` |
+| 横断面网络比较 | 两个或多个独立组；统一节点、编码和估计设置后进行网络比较 | `network_comparison_tutorial.R` |
+| 交叉滞后面板网络（CLPN） | 同一参与者至少两波、宽格式数据；正则化节点回归估计相邻波次预测关联 | `clpn_tutorial.R` |
+| 横断面 NIRA 模拟干预 | 真正的二分类横断面 Ising 网络；小网络优先解析解，网络较大时再考虑 Monte Carlo | `analytical_nira_tutorial.R`；Monte Carlo 模板为可选 |
+| KimNIRA 动态模拟干预 | 按时间排序的密集二分类 EMA/ESM 长格式数据；个体内动态网络 | `kimnira_tutorial.R` |
 
-两个版本均支持自然语言自动调用。Claude 与 Codex 的清单和技能入口彼此独立，不要交叉使用安装命令。
+解析枚举计算精确模型状态结果，但不会消除参与者抽样不确定性；参与者 bootstrap 是另一类不确定性评估。KimNIRA 的 exact 状态空间也随节点数指数增长，超过包的限制时才考虑 Monte Carlo。默认不自动运行多套剂量、方向、诊断或稳定性套餐。
 
-## 功能
-
-- 自动检查数据结构、变量类型、缺失值、稀疏类别和节点信息量；
-- 检查重复或潜在冗余节点，并输出节点审查表；
-- 根据节点类型选择网络模型：
-  - 连续变量：Gaussian Graphical Model（GGM）；
-  - 有序变量：基于 polychoric correlation 的 ordinal GGM；
-  - 二分类变量：Ising model；
-  - 混合变量：Mixed Graphical Model（MGM）；
-- 将社会人口学和临床协变量仅用于控制混杂；
-- 绘制带节点可预测性圆环的症状网络图；
-- 输出 Strength、Expected Influence 等中心性指标；
-- 进行边权精确性、差异检验和 case-dropping 稳定性检验；
-- 在存在预先定义的症状类别时进行桥接网络分析和桥接稳定性检验；
-- 输出调整与未调整网络的敏感性比较；
-- 根据实际分析结果撰写符合学术规范的方法和结果部分；
-- 保留分析决策、数据处理记录、软件版本和结果追踪信息。
-
-## 分析范围
-
-本插件仅用于横断面心理症状网络分析。
-
-协变量只用于控制预先指定的混杂因素。协变量不会作为核心症状、桥接症状或干预靶点进行解释，也不会参与症状中心性排名。
-
-以下分析不属于当前插件范围，计划由其他独立插件处理：
-
-- 调节网络分析；
-- 不同人群或时间点之间的网络比较；
-- 纵向网络、时间网络和个体内网络；
-- 因果发现或有向网络；
-- 干预网络和动态网络。
-
-## 数据要求
-
-支持以下文件：
-
-- Excel：`.xlsx`、`.xls`；
-- CSV：`.csv`；
-- SPSS：`.sav`；
-- Stata：`.dta`；
-- R：`.rds`。
-
-数据应采用参与者 × 变量的矩形结构：
-
-- 每行代表一名参与者或一次独立观察；
-- 每列代表一个症状、协变量或其他研究变量；
-- 第一行必须是唯一的变量名；
-- 不应包含合并单元格、多行表头、合计行或脚注行；
-- 特殊缺失值编码（例如 `-99`、`999`）需要明确说明；
-- 反向计分、维度合成和节点选择规则需要能够追溯。
-
-推荐提供节点信息表：
-
-| 字段 | 含义 | 示例 |
-|---|---|---|
-| `variable` | 数据中的列名 | `PHQ1` |
-| `short_label` | 网络图英文短标签 | `LowMood` |
-| `full_english_label` | 完整英文名称 | `Depressed mood` |
-| `community` | 症状类别 | `Depression` |
-| `measurement` | 测量类型 | `ordinal` |
-
-## 协变量控制
-
-插件支持两类混杂控制思路：
-
-1. **残差化**：仅在症状节点均为连续变量且条件均值模型合理时使用。每个症状使用同一组预设协变量进行回归，然后基于残差估计症状网络。
-2. **联合条件调整**：症状或协变量包含二分类、有序或混合类型时，使用适合变量类型的联合条件模型，并只提取症状—症状子网络。
-
-协变量不能仅因为单因素检验达到 `p < .05` 而被纳入。应根据研究问题、既往证据或明确的混杂路径预先确定。
-
-协变量调整必须在每一次 bootstrap 重抽样中重新执行。插件的通用 R 模板对此采用失败关闭策略，避免错误地对一组固定残差进行 bootstrap。
-
-## 安装
+## 插件与调用
 
 ### Claude Code
 
-#### 从 GitHub 在线安装
+插件：`psych-network-analysis`（前三项）、`psych-network-simulation`（后两项）。自然语言可直接触发；也可显式调用：
 
-添加 GitHub 插件资源：
+```text
+/psych-network-analysis:analyze D:/project/data.xlsx
+/psych-network-analysis:compare-cross-sectional-networks D:/project/data.xlsx
+/psych-network-analysis:analyze-cross-lagged-panel-network D:/project/panel.xlsx
+/psych-network-simulation:simulate-network-intervention D:/project/binary.xlsx
+/psych-network-simulation:simulate-dynamic-network-intervention D:/project/ema.xlsx
+```
+
+从 GitHub Marketplace 安装：
 
 ```text
 /plugin marketplace add kingfly51/psych-network-css
-```
-
-安装插件：
-
-```text
 /plugin install psych-network-analysis@psych-network-css
-```
-
-重新加载：
-
-```text
+/plugin install psych-network-simulation@psych-network-css
 /reload-plugins
-```
-
-#### 从资源包离线安装
-
-资源包 `agent-res` 中应包含完整的 `psych-network-css` 文件夹。请先确认其中存在 `.claude-plugin/marketplace.json`。
-
-Windows：
-
-```text
-/plugin marketplace add c:/agent-res/psych-network-css
-/plugin install psych-network-analysis@psych-network-css
-/reload-plugins
-```
-
-macOS 或 Linux：
-
-```text
-/plugin marketplace add ~/agent-res/psych-network-css
-/plugin install psych-network-analysis@psych-network-css
-/reload-plugins
-```
-
-#### 本地开发加载
-
-在仓库根目录运行：
-
-```powershell
-claude --plugin-dir ./plugins/psych-network-analysis
 ```
 
 ### Codex
 
-Codex 使用仓库根目录下的 `.agents/plugins/marketplace.json`，插件主体位于 `plugins/psych-network-css`。
+插件：`psych-network-css`（前三项）、`psych-network-simulation`（后两项）。可自然语言调用，或使用：
 
-#### 从资源包离线安装
-
-Windows：
-
-```powershell
-codex plugin marketplace add c:/agent-res/psych-network-css
-codex plugin add psych-network-css@psych-network-css
+```text
+$analyze-cross-sectional-network
+$compare-cross-sectional-networks
+$analyze-cross-lagged-panel-network
+$simulate-network-intervention
+$simulate-dynamic-network-intervention
 ```
 
-macOS 或 Linux：
+从本地资源包安装（在包根目录运行）：
 
-```bash
-codex plugin marketplace add ~/agent-res/psych-network-css
-codex plugin add psych-network-css@psych-network-css
-```
-
-安装后请新建一个 Codex 任务，使新技能进入任务上下文。
-
-#### 本地开发加载
-
-在仓库根目录执行：
-
-```powershell
+```text
 codex plugin marketplace add .
 codex plugin add psych-network-css@psych-network-css
+codex plugin add psych-network-simulation@psych-network-css
 ```
 
-## 使用
+如网络可用，也可在 Codex 的“添加插件市场”窗口填写 GitHub 来源 `kingfly51/psych-network-css`；两个插件分别是 `psych-network-css` 与 `psych-network-simulation`。安装后新建任务以加载新 skill。
 
-插件支持自然语言自动调用。安装后可以直接说：
+## 数据准备
 
-```text
-请对当前目录的数据进行横断面心理症状网络分析。
-```
+- 横断面：每行一名参与者、每列一个节点；说明类别类型、计分方向、缺失编码和节点标签。
+- 网络比较：增加组别列，明确组间独立；同一节点须在各组采用一致定义/编码。
+- CLPN：每行一个参与者，包含 ID 和至少两波相同节点的列，如 `Dep_T1`、`Dep_T2`；说明失访和缺失处理。
+- 横断面 NIRA：节点须为有意义且方向一致的 0/1；说明单网络或干预社区/结果社区及结果总分定义。
+- KimNIRA：每行一次 EMA/ESM 观测，含参与者 ID、日/时间顺序以及二分类节点；确认是否跨夜连接相邻观测。
 
-包含协变量时：
+不要仅依据 Excel 中“数字”格式判断测量类型，也不要未经说明就二分化连续/有序节点。若数据字典、节点方向或研究设计无法确定，技能会先标出必要问题。
 
-```text
-请对 data.xlsx 进行横断面心理症状网络分析，并将年龄、性别和教育程度作为混杂因素控制。
-```
-
-Claude Code 可以显式指定技能和数据文件：
-
-```text
-/psych-network-analysis:analyze D:/project/data.xlsx
-```
-
-Codex 可以显式调用：
-
-```text
-使用 $analyze-cross-sectional-network 分析 D:/project/data.xlsx。
-```
-
-## 主要输出
-
-典型分析目录包括：
-
-- `analysis.R`：可复现的 R 分析脚本；
-- `sessionInfo.txt`：R 和软件包版本；
-- `model_decision.txt`：模型选择及理由；
-- `covariate_decision.txt`：协变量选择、编码和调整策略；
-- `data_flow_log.csv`：样本排除和数据处理记录；
-- `node_audit.csv`：节点类型、分布、缺失和冗余检查；
-- `edges.csv`：非零边及边权；
-- `centrality.csv`：症状中心性指标；
-- `stability.csv`：bootstrap 与 CS 系数结果；
-- `bridge_centrality.csv`：桥接指标（适用时）；
-- PDF 和高分辨率 PNG/TIFF 网络图；
-- `manuscript_sections.md`：论文 2.4 Data Analysis 和 3 Results。
-
-## 解释原则
-
-- 横断面网络中的边表示条件关联，不表示因果关系；
-- 中心性高不等于已经证明是最佳干预靶点；
-- Expected Influence 优先用于包含正负边的网络；
-- Closeness 和 Betweenness 只有在稳定性充分时才解释；
-- 桥接指标仅在症状类别具有理论依据时使用；
-- 所有论文结果必须能够追溯到实际输出表格，禁止生成不存在的统计量。
-
-## R 依赖
-
-主要使用以下 R 软件包：
-
-```r
-c(
-  "bootnet", "qgraph", "networktools", "mgm", "readxl", "haven",
-  "readr", "dplyr", "tidyr", "purrr", "tibble", "stringr", "moments"
-)
-```
-
-最终依赖会根据数据类型和所选估计器调整。正式分析建议至少运行 1,000 次 bootstrap；少量 bootstrap 只能用于试运行。
-
-## 当前限制
-
-- 插件不会自动证明协变量是真正的混杂因素；
-- 联合条件协变量调整需要根据具体变量类型选择并验证估计器；
-- 通用模板不能替代研究者对节点含义、量表计分和协变量选择的确认；
-- 小样本、高维节点、极端类别不平衡和大量缺失可能导致网络不稳定；
-- 当前插件不替代统计咨询、研究设计审查或因果推断。
-
-## 仓库结构
+## 文件结构
 
 ```text
 psych-network-css/
-├── .agents/
-│   └── plugins/
-│       └── marketplace.json       # Codex marketplace
-├── .claude-plugin/
-│   └── marketplace.json           # Claude Code marketplace
+├── .claude-plugin/marketplace.json
+├── .agents/plugins/marketplace.json
 ├── plugins/
-│   ├── psych-network-analysis/     # Claude Code version
-│   │   ├── .claude-plugin/
-│   │   ├── assets/
-│   │   ├── references/
-│   │   └── skills/analyze/
-│   └── psych-network-css/          # Codex version
-│       ├── .codex-plugin/
-│       ├── assets/
-│       ├── references/
-│       └── skills/analyze-cross-sectional-network/
-├── scripts/
-│   └── sync-analysis-resources.ps1
+│   ├── psych-network-analysis/   # Claude：横断面、比较、CLPN
+│   ├── psych-network-css/        # Codex：横断面、比较、CLPN
+│   └── psych-network-simulation/ # Claude/Codex：NIRA、KimNIRA
 └── README.md
 ```
 
-## 方法学参考
+## 主要方法来源
 
-- Burger, J., et al. (2023). Reporting standards for psychological network analyses in cross-sectional data. *Psychological Methods, 28*(4), 806–824. https://doi.org/10.1037/met0000471
-- Epskamp, S., Borsboom, D., & Fried, E. I. (2018). Estimating psychological networks and their accuracy: A tutorial paper. *Behavior Research Methods, 50*, 195–212. https://doi.org/10.3758/s13428-017-0862-1
-- Haslbeck, J. M. B., & Waldorp, L. J. (2018). How well do network models predict observations? *Behavior Research Methods, 50*, 853–861. https://doi.org/10.3758/s13428-017-0910-x
-- Jones, P. J., Ma, R., & McNally, R. J. (2021). Bridge centrality: A network approach to understanding comorbidity. *Multivariate Behavioral Research, 56*(2), 353–367. https://doi.org/10.1080/00273171.2019.1614898
+- Cross-sectional reporting: Burger et al. (2023), *Psychological Methods*, 28, 806–824. https://doi.org/10.1037/met0000471
+- Cross-lagged panel network example and code are adapted conceptually from the tutorials supplied in `更新需要的材料`; code is rewritten for explicit matrix orientation, reproducible configuration, and bounded scope.
+- NIRA exact analytical methods: [NIRA_post](https://github.com/kingfly51/NIRA_post), especially `analyticalNIRAtest()` and `analyticalBridgeNIRAtest()`.
+- Dynamic intervention model: [KimNIRA](https://github.com/kingfly51/KimNIRA); tutorial follows its current `fitKIM()` and `runKIMNIRA()` interface. Check the installed version before execution because package APIs can evolve.
+- Applied NIRA report pattern: Wang et al. (2025), *Journal of Affective Disorders*, 369, 321–328. https://doi.org/10.1016/j.jad.2024.08.157
 
-## 安全说明
-
-插件不包含 MCP server 或 hooks。分析前请检查插件内容，并避免将包含敏感参与者信息的原始数据提交到公开仓库。
+本仓库不包含 MCP server 或 hooks。请勿将可识别参与者的原始数据提交到公开仓库。

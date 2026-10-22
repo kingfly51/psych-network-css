@@ -1,0 +1,5 @@
+variable,short_label,full_english_label,community,role,reverse,include
+ACE1,EmoAbuse,Emotional abuse,Adversity,intervention,FALSE,TRUE
+ACE2,PhyAbuse,Physical abuse,Adversity,intervention,FALSE,TRUE
+GAD1,Nervous,Feeling nervous or anxious,Anxiety,outcome,FALSE,TRUE
+GAD2,Worry,Unable to stop worrying,Anxiety,outcome,FALSE,TRUE

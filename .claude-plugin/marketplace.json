@@ -3,13 +3,13 @@
   "owner": {
     "name": "Psych Network CSS"
   },
-  "description": "Claude Code resources for reproducible cross-sectional psychological symptom network analysis workflows in R.",
+  "description": "Five reproducible psychological network analysis workflows for Claude Code and Codex.",
   "plugins": [
     {
       "name": "psych-network-analysis",
       "source": "./plugins/psych-network-analysis",
       "displayName": "Cross-Sectional Psychological Network Analysis",
-      "description": "Cross-sectional psychological symptom network analysis in R with confounder control, data-type-driven model selection, node audit, predictability, centrality, bootstrap stability, bridge analysis, and manuscript-ready reporting.",
+      "description": "Cross-sectional symptom networks, independent-group network comparison, and cross-lagged panel networks, with tutorials and manuscript-ready reporting.",
       "category": "research",
       "tags": [
         "psychology",
@@ -17,6 +17,21 @@
         "network-analysis",
         "r",
         "academic-writing"
+      ],
+      "strict": true
+    },
+    {
+      "name": "psych-network-simulation",
+      "source": "./plugins/psych-network-simulation",
+      "displayName": "Psychological Network Simulation Intervention",
+      "description": "Exact/Monte Carlo cross-sectional NIRA and dynamic KimNIRA intervention simulations with concise tutorials and noncausal reporting.",
+      "category": "research",
+      "tags": [
+        "psychology",
+        "network-analysis",
+        "NIRA",
+        "simulation-intervention",
+        "r"
       ],
       "strict": true
     }

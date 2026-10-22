@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compare Cross-Sectional Networks"
+  short_description: "Compare independent-group symptom networks"
+  default_prompt: "Use $compare-cross-sectional-networks to compare independent-group psychological symptom networks."

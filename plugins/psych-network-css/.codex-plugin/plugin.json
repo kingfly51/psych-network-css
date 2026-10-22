@@ -1,7 +1,7 @@
 {
   "name": "psych-network-css",
-  "version": "1.0.0",
-  "description": "Reproducible cross-sectional psychological symptom network analysis in R with model selection, confounder control, predictability, centrality, stability, bridge analysis, and academic reporting.",
+  "version": "1.1.0",
+  "description": "Psychological network skills for cross-sectional symptom analysis, independent-group network comparison, and cross-lagged panel networks, with tutorials and academic reporting.",
   "author": {
     "name": "Psych Network CSS",
     "url": "https://github.com/kingfly51"
@@ -12,15 +12,17 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Psych Network CSS",
-    "shortDescription": "Cross-sectional symptom network analysis in R.",
-    "longDescription": "Inspect psychological symptom data, select GGM, ordinal GGM, Ising, or MGM, control prespecified confounders, estimate predictability and centrality, assess bootstrap accuracy and stability, run bridge analysis, and draft traceable Methods and Results sections.",
+    "shortDescription": "Analyze and compare psychological networks in R.",
+    "longDescription": "Choose among cross-sectional symptom network analysis, independent-group network comparison, and cross-lagged panel networks. Includes focused R tutorials and traceable Methods and Results reporting.",
     "developerName": "Psych Network CSS",
     "category": "Research",
     "capabilities": ["Data Analysis", "Academic Writing"],
     "defaultPrompt": [
       "请对当前工作区的数据进行横断面心理症状网络分析。",
       "请检查节点类型并选择合适的 GGM、Ising 或 MGM 模型。",
-      "请完成带协变量控制、稳定性检验和桥接分析的症状网络分析。"
+      "请完成带协变量控制、稳定性检验和桥接分析的症状网络分析。",
+      "请比较两个独立群体的横断面心理网络。",
+      "请用 CLPN 分析多波次心理面板数据。"
     ],
     "brandColor": "#0072B2"
   }

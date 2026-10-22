@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cross-Lagged Panel Network"
+  short_description: "Analyze prospective panel networks"
+  default_prompt: "Use $analyze-cross-lagged-panel-network to analyze my repeated-wave psychological panel data."

@@ -1,0 +1,28 @@
+{
+  "name": "psych-network-simulation",
+  "version": "1.1.0",
+  "description": "Cross-sectional analytical/Monte Carlo NIRA and dynamic KimNIRA intervention simulations, with focused tutorials and noncausal reporting.",
+  "author": {
+    "name": "Psych Network CSS",
+    "url": "https://github.com/kingfly51"
+  },
+  "homepage": "https://github.com/kingfly51/psych-network-css",
+  "repository": "https://github.com/kingfly51/psych-network-css",
+  "keywords": ["psychology", "network-analysis", "NIRA", "simulation-intervention", "Ising", "R"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Psych Network Simulation",
+    "shortDescription": "Simulate cross-sectional and dynamic network interventions.",
+    "longDescription": "Use exact analytical NIRA for tractable binary cross-sectional Ising networks and Monte Carlo only when needed; use KimNIRA for dense binary EMA/ESM dynamics. Includes focused tutorials and model-based, noncausal reporting.",
+    "developerName": "Psych Network CSS",
+    "category": "Research",
+    "capabilities": ["Data Analysis", "Simulation", "Academic Writing"],
+    "defaultPrompt": [
+      "请对当前项目的二分类心理网络数据进行计算机模拟干预分析。",
+      "请用 NIRA 解析解分析二分类横断面网络模拟干预。",
+      "请判断应使用单网络还是桥接型模拟干预，并按论文规范报告。",
+      "请用 KimNIRA 分析二分类 EMA 数据的动态模拟干预。"
+    ],
+    "brandColor": "#D55E00"
+  }
+}

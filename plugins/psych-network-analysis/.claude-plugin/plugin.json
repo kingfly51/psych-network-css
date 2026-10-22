@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "displayName": "Cross-Sectional Psychological Network Analysis",
   "name": "psych-network-analysis",
-  "version": "1.2.0",
-  "description": "End-to-end cross-sectional psychological symptom network analysis in R with confounder control, data-type-driven model selection, node audit, predictability, centrality, bootstrap stability, bridge analysis, and manuscript-ready Methods and Results reporting.",
+  "version": "1.3.0",
+  "description": "Psychological network analysis skills for cross-sectional symptom networks, independent-group network comparisons, and cross-lagged panel networks, with concise tutorials and manuscript-ready reporting.",
   "author": {
     "name": "Psych Network CSS"
   }

@@ -13,6 +13,10 @@ Allow automatic invocation from natural language. The user may simply say, for e
 
 When no explicit path is supplied, search the current project for supported tabular files. If exactly one plausible data file exists, inspect it and proceed. If several plausible files exist, ask the user to identify the intended file. If none exists, ask the user to attach the data or provide its path. Explicit `$analyze-cross-sectional-network` invocation remains optional.
 
+## Time and scope
+
+Use one primary model and only the analyses needed for the stated question. Keep node audit, the network plot with predictability, centrality, and core bootstrap stability; add bridge analysis only for defensible communities. Do not automatically multiply sensitivity networks, subgroup analyses, alternate estimators, centrality batteries, or plots. Ask before a substantial long-running extension. Do quick data checks before expensive resampling and avoid repeated trial runs.
+
 ## Required inputs
 
 Locate or request only what cannot be inferred safely:
@@ -52,7 +56,7 @@ Covariates may be included internally in a joint conditional model, but never tr
 6. Choose one prespecified confounder-control strategy. Use residualization when all symptom nodes are continuous and the covariate mean model is defensible. Otherwise prefer a joint conditional model appropriate to all symptom and covariate types, then extract the symptom-to-symptom subnetwork. Do not apply ordinary linear residualization to binary or ordinal symptoms and then describe the residuals as binary or ordinal nodes.
 7. Choose exactly one primary symptom-network model from the observed node types and adjustment strategy: GGM, Ising, or MGM. Record the decision and rationale in `model_decision.txt`. Do not choose from the spreadsheet storage class alone; integer storage does not prove ordinal or binary measurement.
 8. Start from [network_analysis_template.R](../../assets/network_analysis_template.R). Copy it into the analysis output folder and tailor the configuration block, node metadata, scoring rules, covariate adjustment, and model branch. Do not edit the bundled template in place.
-9. Estimate both the prespecified adjusted network and an unadjusted symptom-only sensitivity network using otherwise comparable settings. The adjusted network is primary when confounder control was prespecified. Re-run the complete adjustment step inside every bootstrap resample.
+9. Estimate the prespecified primary symptom network. When confounders were selected a priori, use the adjusted network as primary and rerun adjustment inside each bootstrap resample. Add an unadjusted comparison only if it is needed to answer the question or was prespecified; do not run it automatically.
 10. Estimate the network and export the weighted adjacency matrix, nonzero edge list, density/sparsity, sign distribution, strongest edges, and model settings. Use a fixed seed. Record R and package versions with `sessionInfo()`.
 11. Estimate node predictability with a model appropriate to each symptom family. Draw it as a ring around each symptom node. State the metric: R-squared for Gaussian nodes and normalized accuracy for categorical/binary nodes. Do not label classification accuracy as R-squared. When covariates are used internally, label whether predictability includes their contribution.
 12. Draw the symptom-only network with concise English node labels, a colorblind-safe community palette, signed edges, and a fixed reusable layout. Never pass full item wording to qgraph's `nodeNames` in the main figure. Set the qgraph node legend to off, place a community-only legend in a separate figure panel, and export `node_codebook.csv` with variable names, short labels, full English wording, and communities. Export PDF plus a high-resolution PNG or TIFF. Never show covariates as ordinary symptom nodes in the primary figure.
