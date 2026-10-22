@@ -84,12 +84,4 @@ psych-network-css/
 └── README.md
 ```
 
-## 主要方法来源
 
-- Cross-sectional reporting: Burger et al. (2023), *Psychological Methods*, 28, 806–824. https://doi.org/10.1037/met0000471
-- Cross-lagged panel network example and code are adapted conceptually from the tutorials supplied in `更新需要的材料`; code is rewritten for explicit matrix orientation, reproducible configuration, and bounded scope.
-- NIRA exact analytical methods: [NIRA_post](https://github.com/kingfly51/NIRA_post), especially `analyticalNIRAtest()` and `analyticalBridgeNIRAtest()`.
-- Dynamic intervention model: [KimNIRA](https://github.com/kingfly51/KimNIRA); tutorial follows its current `fitKIM()` and `runKIMNIRA()` interface. Check the installed version before execution because package APIs can evolve.
-- Applied NIRA report pattern: Wang et al. (2025), *Journal of Affective Disorders*, 369, 321–328. https://doi.org/10.1016/j.jad.2024.08.157
-
-本仓库不包含 MCP server 或 hooks。请勿将可识别参与者的原始数据提交到公开仓库。
