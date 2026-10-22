@@ -5,6 +5,10 @@ description: Run or design cross-sectional binary Ising network simulation inter
 
 # Psychological network simulation intervention
 
+## Analysis-to-manuscript workflow
+
+Before running a simulation, follow [analysis-reporting-frameworks.md](../../references/analysis-reporting-frameworks.md): decide the data eligibility, node roles and score, Ising fit/assumption checks, exact-versus-MC method, one intervention direction/dose, resampling, and the required results table/figure. Analyze supplied data only; do not synthesize or silently dichotomize data unless the user explicitly authorizes a labeled demonstration. Verify each reported result against machine-readable outputs, then write paper-style `2.4 Data Analysis` and supported `3 Results` subsections in connected prose. Export matching Markdown and Word (`manuscript_sections.docx`) by default.
+
 Use this workflow as a second, independent feature beside the cross-sectional network-analysis plugin. Natural-language requests are sufficient; do not require an explicit `$simulate-network-intervention` invocation.
 
 ## Inputs and discovery
@@ -40,12 +44,12 @@ Record the decision in `simulation_model_decision.txt`. If NIRA is inapplicable,
 2. Export `node_audit.csv`: data/storage class, observed values, missing n/%, prevalence of 1, sparse/constant flags, label, community, role, and coding direction. Stop for non-binary, constant, or unresolved nodes.
 3. Handle missing values explicitly. Do not silently use listwise deletion. Prefer a justified binary-data imputation method plus complete-case sensitivity analysis; report the method and assumptions. If complete-case analysis is selected, report excluded n/% and why it is defensible.
 4. Estimate one Ising model using the prespecified estimator and matching edge-selection rule. Export weights and thresholds.
-5. Check the fixed-edge assumption with `runMgmmAnalysis()` only when this diagnostic is part of the selected NIRA workflow. Use a small run only as a clearly labeled diagnostic; reserve large resampling counts for the final analysis. If stable moderation is detected, flag the NIRA projection as assumption-sensitive rather than automatically running additional diagnostics.
-6. Prefer `NIRApost::analyticalNIRAtest()` (single network) or `analyticalBridgeNIRAtest()` (intervention-to-outcome communities) for small networks. Exact enumeration has exponential cost in node count; obey package limits and do not raise them automatically. These functions enumerate states exactly; participant bootstrap, if requested, quantifies sampling uncertainty and is distinct from Monte Carlo error.
-7. Use `method = "mc"` only when exact enumeration is infeasible at the current network size or the user explicitly requests it. Explain Monte Carlo error separately from sampling uncertainty. Do not run exact and MC pipelines, multiple intensity grids, both perturbation directions, or several resampling methods by default. Analyze only the prespecified intervention direction and intensity; sensitivity analyses are optional and should be few and justified.
+5. Run `NIRApost::runMgmmAnalysis()` as the fixed-edge/moderation prerequisite before primary intervention interpretation. Label pilot settings; report formal resample count/correction. Stable moderation means stop or label subsequent NIRA projections assumption-sensitive.
+6. Use current NIRApost >=1.2.0 analytical functions (`analyticalNIRAtest()` or `analyticalBridgeNIRAtest()`) for tractable networks. Exact state enumeration removes Monte Carlo error; participant resampling estimates sampling uncertainty and `percenttop_1` reports rank stability. Run both alleviating and aggravating conditions at prespecified doses. Export each target's projected score, effect, CI, adjusted inference and rank stability.
+7. Do not add the older Monte Carlo permutation/repeated-simulation pipeline to the analytical workflow by default. Use that distinct workflow only when exact enumeration is infeasible or explicitly requested; report permutation inference, Monte Carlo error and repeated-run rank stability as separate quantities. Do not conflate these uncertainties.
 8. For single-network NIRA, estimate change in the coherent total score. For bridge NIRA, intervene only on the declared source community and score only the declared outcome community.
 9. Export each node's estimated outcome change, uncertainty interval, and multiplicity-adjusted inference when supported by the selected analytical function. Do not mislabel Glass's Δ as Cohen's d, or exact enumeration as evidence of statistical significance without the participant-resampling inference.
-10. Read [reporting-standard.md](../../references/reporting-standard.md) and write only `2.4 Data Analysis` and `3 Results` unless the user requests more. Include only diagnostics actually run; never invent values.
+10. Follow [analysis-reporting-frameworks.md](../../references/analysis-reporting-frameworks.md) and [reporting-standard.md](../../references/reporting-standard.md). Write only `2.4 Data Analysis` and supported `3 Results` subsections unless the user requests more. Include only diagnostics actually run; never invent values.
 11. Record seed, package version, model settings, and `sessionInfo()`. Run the quality gate.
 
 ## Interpretation boundary
@@ -62,6 +66,7 @@ Fail or clearly label the run incomplete when:
 - missing data are silently deleted or imputed;
 - an assumption check included in the selected analysis is omitted or inconsistent with the Ising rule;
 - significant moderation is present but the NIRA result is presented as primary evidence;
+- only one intervention direction is reported when the workflow requires both;
 - analytical enumeration is described as eliminating participant-sampling uncertainty;
 - Monte Carlo error is conflated with participant-sampling uncertainty;
 - a conventional 2-SD perturbation is described as a realistic treatment dose without justification;
@@ -74,8 +79,10 @@ Create a compact output directory containing:
 
 - `analysis.R`, `sessionInfo.txt`, `simulation_model_decision.txt`, `assumption_check.md`, and a data-flow log;
 - `node_metadata.csv`, `node_audit.csv`, `edge_weights.csv`, `thresholds.csv`, and moderation outputs;
-- primary model-based effect table and one supporting figure when useful;
+- analytical effect tables for both directions, bootstrap rank-stability fields and exact-solution plots;
 - `manuscript_sections.md` with evidence-grounded statistical analysis and Results;
+- `manuscript_sections.docx` with the verified manuscript content;
+- `claim_traceability.csv` mapping every reported number to its source output;
 - `run_summary.md` listing warnings, assumption violations, preliminary settings, and unresolved decisions.
 
 Do not claim successful completion unless the R workflow ran without errors and each reported result is traceable.
