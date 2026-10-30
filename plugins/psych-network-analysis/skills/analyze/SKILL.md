@@ -8,6 +8,10 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Edit
 
 # Psychological symptom network analysis
 
+Before running the analysis, follow [analysis-reporting-frameworks.md](../../references/analysis-reporting-frameworks.md) to define the sample/model decisions, required diagnostics, output tables, and Results outline. Verify every manuscript statistic against an exported file and write connected paper-style `2.4 Data Analysis` and supported `3 Results` subsections. Export both Markdown and Word (`manuscript_sections.docx`) by default. Use supplied data; never fabricate results unless the user explicitly requests a clearly labeled synthetic demonstration.
+
+Before running the analysis, follow [analysis-reporting-frameworks.md](../../references/analysis-reporting-frameworks.md) to define the sample/model decisions, required diagnostics, output tables, and Results outline. Verify every manuscript statistic against an exported file and write connected paper-style `2.4 Data Analysis` and supported `3 Results` subsections. Export both Markdown and Word (`manuscript_sections.docx`) by default. Use supplied data; never fabricate results unless the user explicitly requests a clearly labeled synthetic demonstration.
+
 Perform a reproducible cross-sectional symptom-network workflow in R. Treat `$ARGUMENTS` as candidate input paths or user instructions. Never infer substantive node meaning from opaque column names.
 
 ## Natural-language invocation

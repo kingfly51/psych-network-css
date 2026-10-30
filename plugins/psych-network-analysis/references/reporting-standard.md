@@ -1,4 +1,6 @@
-# Reporting standard: Sections 2.4 and 3 only
+# Reporting standard: manuscript sections 2.4 and 3
+
+First follow [analysis-reporting-frameworks.md](analysis-reporting-frameworks.md) for the selected method. Produce a dataset-specific analysis plan before modeling, verify every reported number against exported outputs, write full connected academic prose, and export both Markdown and Word. A run summary is not a manuscript. Include only 2.4 Data Analysis and supported subsections of 3 Results unless the user requests other sections.
 
 Write in the manuscript's requested language while retaining standard English statistical terms and node labels. Use past tense for completed analyses. Keep evidence, interpretation, and limitations distinct.
 

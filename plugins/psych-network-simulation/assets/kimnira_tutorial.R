@@ -28,6 +28,18 @@ seed <- 20261022L
 # -------------------------------------------------------------------
 
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
+
+# Save ggplot and qgraph result figures as PNG + PDF.
+save_gg <- function(p, base, width = 9, height = 6) {
+  ggsave(paste0(base, ".png"), p, width = width, height = height, dpi = 300)
+  ggsave(paste0(base, ".pdf"), p, width = width, height = height)
+}
+save_qgraph <- function(draw, base, width = 8, height = 7) {
+  pdf(paste0(base, ".pdf"), width = width, height = height); draw(); dev.off()
+  png(paste0(base, ".png"), width = width, height = height, units = "in", res = 300)
+  draw(); dev.off()
+}
+
 dat <- as.data.frame(read_excel(file))
 stopifnot(all(c(id, day, beep, vars) %in% names(dat)))
 if (anyNA(dat[[id]]) || anyNA(dat[[day]]) || anyNA(dat[[beep]]))
@@ -88,9 +100,14 @@ if (length(centrality$plots)) {
   for (nm in names(centrality$plots)) {
     p <- centrality$plots[[nm]]
     if (inherits(p, "ggplot"))
-      ggsave(file.path(output_dir, paste0("centrality_", nm, ".png")), p,
-             width = 8, height = 5, dpi = 300)
+      save_gg(p, file.path(output_dir, paste0("centrality_", nm)), width = 8, height = 5)
   }
+}
+
+# Temporal and between-person network figures (qgraph objects)
+for (tp in c("temporal", "between")) {
+  save_qgraph(function() kimPlotNetwork(fit, type = tp),
+              file.path(output_dir, paste0("kimPlotNetwork_", tp)))
 }
 
 mixing <- kimMixing(fit, persons = "typical")
@@ -123,19 +140,8 @@ if (run_lag2_check) {
              file.path(output_dir, "lag2_predictive_check_not_run.txt"))
 }
 
-if (run_landscape && length(vars) <= exact_max_nodes) {
-  landscape <- tryCatch(kimBistability(fit, spectral = "typical", verbose = FALSE),
-                        error = function(e) structure(list(error = conditionMessage(e)), class = "diagnostic_error"))
-  saveRDS(landscape, file.path(output_dir, "stationary_landscape.rds"))
-  if (!is.null(landscape$count_distribution))
-    write.csv(landscape$count_distribution, file.path(output_dir, "stationary_activation_landscape.csv"), row.names = FALSE)
-  if (!is.null(landscape$modes))
-    write.csv(landscape$modes, file.path(output_dir, "stationary_modes.csv"), row.names = FALSE)
-} else {
-  writeLines("Not run: landscape enumeration disabled or node count exceeds the configured computational guard.",
-             file.path(output_dir, "stationary_landscape_not_run.txt"))
-}
-
+# The stability landscape is computed after the NIRA result, so it can include
+# the baseline plus every intervening condition (kimBistability(primary)).
 if (length(vars) > exact_max_nodes && primary_method == "exact")
   stop("Node count exceeds exact_max_nodes. Review computational feasibility, then explicitly select method='mc' if needed.")
 primary <- runKIMNIRA(
@@ -148,17 +154,44 @@ saveRDS(primary, file.path(output_dir, "nira_alleviating_logit.rds"))
 write.csv(primary$summary, file.path(output_dir, "nira_alleviating_logit_results.csv"), row.names = FALSE)
 if (!is.null(primary$exact_conditions))
   write.csv(primary$exact_conditions, file.path(output_dir, "nira_alleviating_logit_conditions.csv"), row.names = FALSE)
-ggsave(file.path(output_dir, "kimPlotNIRA_alleviating_logit.png"),
-       kimPlotNIRA(primary, perturbation_type = "alleviating", node_labels = setNames(vars, vars)),
-       width = 9, height = 6, dpi = 300)
-ggsave(file.path(output_dir, "trajectory_summary.png"),
-       kimPlotTrajectory(primary, type = "summary", node_labels = setNames(vars, vars)),
-       width = 9, height = 6, dpi = 300)
+save_gg(suppressWarnings(kimPlotNIRA(primary, perturbation_type = "alleviating",
+                                     node_labels = setNames(vars, vars))),
+        file.path(output_dir, "kimPlotNIRA_alleviating_logit"))
+save_gg(kimPlotTrajectory(primary, type = "summary", node_labels = setNames(vars, vars)),
+        file.path(output_dir, "trajectory_summary"))
 top_target <- primary$ranked_targets[1]
-ggsave(file.path(output_dir, paste0("trajectory_top_target_", top_target, ".png")),
-       kimPlotTrajectory(primary, type = "node", target = top_target,
-                         node_labels = setNames(vars, vars)),
-       width = 9, height = 6, dpi = 300)
+save_gg(kimPlotTrajectory(primary, type = "node", target = top_target,
+                          node_labels = setNames(vars, vars)),
+        file.path(output_dir, paste0("trajectory_top_target_", top_target)))
+
+# Stability / potential landscape: baseline plus every alleviating target.
+# U(K) = -log P(K); the valley is the system's most likely stable configuration.
+if (run_landscape && length(vars) <= exact_max_nodes) {
+  landscape <- tryCatch(kimBistability(primary, verbose = FALSE),
+                        error = function(e) structure(list(error = conditionMessage(e)),
+                                                      class = "diagnostic_error"))
+  saveRDS(landscape, file.path(output_dir, "stationary_landscape.rds"))
+  if (!is.null(landscape$count_distribution)) {
+    write.csv(landscape$count_distribution,
+              file.path(output_dir, "stationary_activation_landscape.csv"), row.names = FALSE)
+    land_conditions <- c("baseline", vars)
+    p_land <- tryCatch(kimPlotLandscape(
+      landscape, conditions = land_conditions, per_state = FALSE, type = "potential"),
+      error = function(e) NULL)
+    if (!is.null(p_land))
+      save_gg(p_land, file.path(output_dir, "kimPlotLandscape_potential"), width = 10, height = 6)
+    p_land_prob <- tryCatch(kimPlotLandscape(
+      landscape, conditions = land_conditions, per_state = FALSE, type = "probability"),
+      error = function(e) NULL)
+    if (!is.null(p_land_prob))
+      save_gg(p_land_prob, file.path(output_dir, "kimPlotLandscape_probability"), width = 10, height = 6)
+  }
+  if (!is.null(landscape$modes))
+    write.csv(landscape$modes, file.path(output_dir, "stationary_modes.csv"), row.names = FALSE)
+} else {
+  writeLines("Not run: landscape enumeration disabled or node count exceeds the configured computational guard.",
+             file.path(output_dir, "stationary_landscape_not_run.txt"))
+}
 
 # Equal-probability dose is a separate, prespecified sensitivity analysis.
 if (run_equal_probability) {
@@ -172,9 +205,9 @@ if (run_equal_probability) {
   write.csv(equal_prob$summary, file.path(output_dir, "nira_alleviating_equal_probability_results.csv"), row.names = FALSE)
   if (!is.null(equal_prob$delta_prob_table))
     write.csv(equal_prob$delta_prob_table, file.path(output_dir, "equal_probability_dose_calibration.csv"), row.names = FALSE)
-  ggsave(file.path(output_dir, "kimPlotNIRA_alleviating_equal_probability.png"),
-         kimPlotNIRA(equal_prob, perturbation_type = "alleviating", node_labels = setNames(vars, vars)),
-         width = 9, height = 6, dpi = 300)
+  save_gg(suppressWarnings(kimPlotNIRA(equal_prob, perturbation_type = "alleviating",
+                                       node_labels = setNames(vars, vars))),
+          file.path(output_dir, "kimPlotNIRA_alleviating_equal_probability"))
 }
 
 # Participant-level resampling quantifies sampling uncertainty and rank stability;

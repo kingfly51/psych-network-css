@@ -1,5 +1,7 @@
 # Reporting standard for simulation interventions
 
+Use [analysis-reporting-frameworks.md](analysis-reporting-frameworks.md) before analysis. Write connected manuscript prose for Section 2.4 and supported subsections of Section 3, verify every claim against saved output, create `claim_traceability.csv`, and export editable Markdown and Word. A short run summary does not replace the manuscript. Synthetic data require explicit user authorization and prominent non-empirical labels.
+
 Use the JAFD application as an organizational model and the AMPPS tutorial as the methodological standard. Paraphrase; do not copy article sentences.
 
 ## Statistical analysis

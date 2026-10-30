@@ -2,7 +2,7 @@
 
 面向 Claude Code 和 Codex 的心理网络分析资源包。包含五个相互独立的分析 skill，分装在两个插件中：横断面网络分析、横断面网络比较、交叉滞后面板网络（CLPN）、横断面 NIRA 计算机模拟干预、KimNIRA 动态模拟干预。每项功能都有对应的精简 R 教程。
 
-所有流程以数据结构和研究问题为起点，控制默认分析数量与计算量；可选分析不自动铺开。学术报告范围默认为 `2.4 Data Analysis` 与 `3 Results`，只报告实际运行且可追溯的结果。网络关联或模拟结果不表述为因果效应或已证实的治疗效果。
+所有流程以数据结构和研究问题为起点，先按各方法的分析与报告框架确定样本审计、主模型、必需结果和图表，再运行分析并核对输出。控制默认分析数量与计算量；可选分析不自动铺开。学术报告范围默认为 `2.4 Data Analysis` 与 `3 Results`，只报告实际运行且可追溯的结果。默认同时输出 Markdown 与 Word（`.docx`）稿件及 `claim_traceability.csv`。网络关联或模拟结果不表述为因果效应或已证实的治疗效果。
 
 ## 五项功能
 
@@ -84,4 +84,12 @@ psych-network-css/
 └── README.md
 ```
 
+## 主要方法来源
 
+- Cross-sectional reporting: Burger et al. (2023), *Psychological Methods*, 28, 806–824. https://doi.org/10.1037/met0000471
+- Cross-lagged panel network example and code are adapted conceptually from the tutorials supplied in `更新需要的材料`; code is rewritten for explicit matrix orientation, reproducible configuration, and bounded scope.
+- NIRA exact analytical methods: [NIRA_post](https://github.com/kingfly51/NIRA_post), especially `analyticalNIRAtest()` and `analyticalBridgeNIRAtest()`.
+- Dynamic intervention model: [KimNIRA](https://github.com/kingfly51/KimNIRA); tutorial follows its current `fitKIM()` and `runKIMNIRA()` interface. Check the installed version before execution because package APIs can evolve.
+- Applied NIRA report pattern: Wang et al. (2025), *Journal of Affective Disorders*, 369, 321–328. https://doi.org/10.1016/j.jad.2024.08.157
+
+本仓库不包含 MCP server 或 hooks。请勿将可识别参与者的原始数据提交到公开仓库。

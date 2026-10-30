@@ -5,6 +5,10 @@ description: Run or design a reproducible cross-sectional psychological symptom 
 
 # Psychological symptom network analysis
 
+## Analysis-to-manuscript workflow
+
+This skill is both an analysis assistant and a results-writing assistant. Follow [analysis-reporting-frameworks.md](../../references/analysis-reporting-frameworks.md) before running the model: define the sample, node/model decisions, planned diagnostics, required result tables, and Section 3 outline first. Then analyze the user's data, verify every statistic against saved outputs, and write paper-style `2.4 Data Analysis` and supported `3 Results` subsections. Do not substitute a short summary for these sections. Export both `manuscript_sections.md` and `manuscript_sections.docx` by default. Do not fabricate data or findings unless the user explicitly asks for a synthetic demonstration; label all synthetic outputs as non-empirical.
+
 Perform a reproducible cross-sectional symptom-network workflow in R. Treat paths in the user request, attachments, and current workspace as candidate inputs. Never infer substantive node meaning from opaque column names.
 
 ## Natural-language invocation
@@ -64,8 +68,8 @@ Covariates may be included internally in a joint conditional model, but never tr
 14. Assess edge-weight accuracy with nonparametric bootstrap confidence intervals and edge/centrality difference tests. Assess centrality stability with case-dropping bootstrap and report the correlation-stability coefficient. Use at least 1,000 bootstrap samples for final analysis unless computational limits are disclosed; small trial runs must be labeled preliminary.
 15. If there are at least two defensible symptom communities, run bridge analysis on symptom nodes only. Make bridge expected influence the primary signed bridge index; export bridge indices and plots. Run case-dropping stability for bridge indices when the installed `bootnet` version supports them. If unsupported, use a documented custom case-dropping re-estimation routine or state that bridge stability was not estimated; never present ordinary centrality stability as bridge stability.
 16. Compare adjusted and unadjusted networks descriptively as a sensitivity analysis. Do not use NCT merely to compare these two dependent estimates from the same participants. Report material changes in key edges, rankings, predictability, and stability without treating adjustment differences as formal group effects.
-17. Write only `2.4 Data Analysis` and all subsections of `3 Results` unless the user asks for more. Read [reporting-standard.md](../../references/reporting-standard.md) and [reference-paper-notes.md](../../references/reference-paper-notes.md). Report observed values from generated tables, never placeholders or invented statistics.
-18. Run the quality gate below before delivery.
+17. Follow the reporting framework and [reporting-standard.md](../../references/reporting-standard.md); write only `2.4 Data Analysis` and supported subsections of `3 Results` unless the user asks for more. Match the depth and connected academic prose of the included cross-sectional manuscript example. Report observed values from generated tables, never placeholders or invented statistics.
+18. Build `claim_traceability.csv` mapping every reported number to an output file/field. Export Markdown and Word. Run the quality gate below before delivery.
 
 ## Missing data
 
@@ -101,6 +105,8 @@ Create a stable output directory containing:
 - adjusted and unadjusted symptom-network summaries plus a sensitivity comparison table when covariates are present;
 - network, centrality, accuracy/stability, difference-test, and bridge figures;
 - `manuscript_sections.md` containing only Section 2.4 and Section 3;
+- `manuscript_sections.docx` with the same verified content and academic heading hierarchy;
+- `claim_traceability.csv` mapping manuscript claims to output values;
 - a concise run summary listing warnings, sensitivity analyses, and unresolved decisions.
 
 Do not claim successful completion unless the R script ran without errors and every reported statistic can be traced to an output file.
